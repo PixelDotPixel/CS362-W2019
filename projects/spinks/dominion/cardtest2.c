@@ -27,12 +27,12 @@ int assertC(int actual, int expected)
     if (actual == expected)
     {
         printf("--PASSED--\n"); 
-        return -1;
+        return 0;
     }
     else
     {
         printf("--TEST FAILED--\n");
-        return 0;
+        return -1;
     }
 }
 

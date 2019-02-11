@@ -6,19 +6,19 @@
 #include "rngs.h"
 
 // set NOISY_TEST to 0 to remove printfs from output
-#define NOISY_TEST 0
+#define NOISY_TEST 1
 
 int assertC(int actual, int expected)
 {
     if (actual == expected)
     {
         printf("--PASSED--\n"); 
-        return -1;
+        return 0;
     }
     else
     {
         printf("--TEST FAILED--\n");
-        return 0;
+        return -1;
     }
 }
 
@@ -38,6 +38,7 @@ int main() {
     int i;
     int j;
     int p;
+	int result = 0;
     int seed = 1323;
     struct gameState state;
     int players = 2;
@@ -72,12 +73,12 @@ int main() {
 #if (NOISY_TEST == 1)
         printf("state.hand[0][%d] == %d, expected == %d\n", i, state.hand[0][i], (i + j*5));
 #endif
-            assert(state.hand[0][i] == (i + j*5));
+            result= result + assertC(state.hand[0][i], (i + j*5));
 
 #if (NOISY_TEST == 1)
         printf("state.hand[1][%d] == %d, expected == %d\n", i, state.hand[1][i], (27 - i - (j*5)));
 #endif
-            assert(state.hand[1][i] == (27 - i - (j*5)));
+            result= result + assertC(state.hand[1][i], (27 - i - (j*5)));
         }
 
         for(i = 0; i < 5; i++){
@@ -89,18 +90,18 @@ int main() {
 #if (NOISY_TEST == 1)
         printf("state.handCount[0] == %d, expected == %d\n", state.handCount[0], 5-(i+1));
 #endif            
-            assert(state.handCount[0] == 5-(i+1));
+            result= result + assertC(state.handCount[0], 5-(i+1));
 
 #if (NOISY_TEST == 1)
         printf("state.hand[0][%d] == %d, expected == %d\n", i, state.hand[0][5-(i+1)], -1);
 #endif          
-            assert(state.hand[0][5-(i+1)] == -1);
+            result= result + assertC(state.hand[0][5-(i+1)], -1);
 
 
 #if (NOISY_TEST == 1)
         printf("playedCardCount == %d, state.playedCards[state.playedCardCount - 1] == %d, expected == %d\n", state.playedCardCount, state.playedCards[state.playedCardCount - 1], tempCard1);
 #endif          
-            assert(state.playedCards[state.playedCardCount - 1] == tempCard1);
+            result= result + assertC(state.playedCards[state.playedCardCount - 1], tempCard1);
 
 			printf("----------Testing Card %d: Opponent------------\n", i+1);
 
@@ -109,19 +110,20 @@ int main() {
 #if (NOISY_TEST == 1)
         printf("state.handCount[1] == %d, expected == %d\n", state.handCount[1], 5-(i+1));
 #endif            
-            assert(state.handCount[1] == 5-(i+1));
+            result= result + assertC(state.handCount[1], 5-(i+1));
 
 #if (NOISY_TEST == 1)
         printf("state.hand[0][%d] == %d, expected == %d\n", i, state.hand[0][i], (i + j*5));
 #endif          
-            assert(state.hand[1][5-(i+1)] == -1);
+            result= result + assertC(state.hand[1][5-(i+1)], -1);
 
 #if (NOISY_TEST == 1)
         printf("platedCardCount - 1 == %d, state.playedCards[state.playedCardCount - 1] == %d, expected == %d\n\n", state.playedCardCount - 1, state.playedCards[state.playedCardCount - 1], tempCard2);
 #endif          
-            assert(state.playedCards[state.playedCardCount - 1] == tempCard2);
+            result= result + assertC(state.playedCards[state.playedCardCount - 1], tempCard2);
         }
-
+	
+	printResult(result);
 
     }
 

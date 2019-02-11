@@ -13,12 +13,12 @@ int assertC(int actual, int expected)
     if (actual == expected)
     {
         printf("--PASSED--\n"); 
-        return -1;
+        return 0;
     }
     else
     {
         printf("--TEST FAILED--\n");
-        return 0;
+        return -1;
     }
 }
 
@@ -100,6 +100,7 @@ int main()
     int j;
     int p;
     int seed = 1323;
+	int result = 0;
     struct gameState state;
     struct gameState test1;
     struct gameState test2;    
@@ -118,7 +119,8 @@ int main()
     enum CARD temp;
     for(temp = curse; temp <= treasure_map; temp++){
         printf("getCost(%d) == %d, expected == %d\n", temp, getCost(temp), getVal(temp));
-        assertC(getCost(temp), getVal(temp));
+        result = result + assertC(getCost(temp), getVal(temp));
     }
+	printResult(result);
 }
 

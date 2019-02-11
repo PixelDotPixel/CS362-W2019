@@ -13,12 +13,12 @@ int assertC(int actual, int expected)
     if (actual == expected)
     {
         printf("--PASSED--\n"); 
-        return -1;
+        return 0;
     }
     else
     {
         printf("--TEST FAILED--\n");
-        return 0;
+        return -1;
     }
 }
 
@@ -48,6 +48,7 @@ int main()
         int i;
         int j;
         int p;
+		int result = 0;
         int seed = 1323;
         struct gameState state, G;
         struct gameState discardState;
@@ -61,8 +62,7 @@ int main()
 
         int handRef[2][10];
 
-        enum CARD cardsList[27] = {curse, estate, duchy, province, copper, silver, gold, adventurer, council_room, feast, gardens, mine, remodel, smithy,
-                                   village, baron, great_hall, minion, steward, tribute, ambassador, cutpurse, embargo, outpost, salvager, sea_hag, treasure_map};
+        enum CARD cardsList[27] = {curse, estate, duchy, province, copper, silver, gold, adventurer, council_room, feast, gardens, mine, remodel, smithy, village, baron, great_hall, minion, steward, tribute, ambassador, cutpurse, embargo, outpost, salvager, sea_hag, treasure_map};
 
         initializeGame(players, k, seed, &state);
 
@@ -98,7 +98,7 @@ int main()
 #endif                
 
                 //Asserts that the deck has taken in the discard pile
-                assertC(discardState.deckCount[0], 13);
+                result= result + assertC(discardState.deckCount[0], 13);
             }
         }
 
@@ -107,15 +107,15 @@ int main()
 #endif             
 
         //Assert that the deck is empty again
-        assertC(discardState.deckCount[0], 0);
+        result= result + assertC(discardState.deckCount[0], 0);
         
         //Assert that each card in the discardPile is in the players deck now
         for(i = 0; i < 13; i++){
 
 #if (NOISY_TEST == 1)
-                        printf("%d: discardState.hand[0][%d] == %d, expected == TRUE\n", i, discardState.hand[0][i]);
+                        printf("%d: discardState.hand[0][%d] == %d, expected == TRUE\n", i, i, discardState.hand[0][i]);
 #endif             
-            assertC(handContainsCard(refDeck[i], &discardState, 0), 1);
+            result= result + assertC(handContainsCard(refDeck[i], &discardState, 0), 1);
         }
 
 
@@ -123,13 +123,15 @@ int main()
 
         for(i = 0; i < G.deckCount[0]; i++){
             drawCard(0, &G);
-            printf("handCount == %d, expected == %d", G.handCount[0], state.handCount[0] + (i+1));
+            printf("handCount == %d, expected == %d\n", G.handCount[0], state.handCount[0] + (i+1));
             result = result + assertC(G.handCount[0], state.handCount[0] + (i+1));
-            printf("deckCount == %d, expected == %d", G.deckCount[0], state.deckCount[0] - (i+1));
+            printf("deckCount == %d, expected == %d\n", G.deckCount[0], state.deckCount[0] - (i+1));
             result = result + assertC(G.deckCount[0], state.deckCount[0] - (i+1));
         }
 
-        printf("handCount == %d, expected (deckCount) == %d", G.handCount[0], state.deckCount[0]);
+        printf("handCount == %d, expected (deckCount) == %d\n", G.handCount[0], state.deckCount[0]);
         result = result + assertC(G.handCount[0], state.deckCount[0]);
+
+		printResult(result);
 }
 

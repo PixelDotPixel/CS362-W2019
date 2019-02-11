@@ -13,12 +13,12 @@ int assertC(int actual, int expected)
     if (actual == expected)
     {
         printf("--PASSED--\n"); 
-        return -1;
+        return 0;
     }
     else
     {
         printf("--TEST FAILED--\n");
-        return 0;
+        return -1;
     }
 }
 
@@ -57,6 +57,7 @@ int main()
     int i;
     int j;
     int p;
+	int result = 0;
     int seed = 1323;
     struct gameState state;
     struct gameState test1;
@@ -90,10 +91,10 @@ int main()
         printf("Hand: scoreFor(0, test1) == %d, expected == %d\n", scoreFor(0, &test1), tempScore);
 #endif
 
-        assertC(scoreFor(0, &test1), tempScore);
+        result = result + assertC(scoreFor(0, &test1), tempScore);
     }
 
-    assertC(scoreFor(0, &test1), 10);
+    result = result + assertC(scoreFor(0, &test1), 10);
 
     for(i = 0; i < 10; i++){
         //adding all the cards together == -1 + 1 +3 +6 + 1, + 10/10 -1 + 1 + 3 == 14
@@ -106,7 +107,7 @@ int main()
     printf("Deck: scoreFor(0, test1) == %d, expected == %d\n", scoreFor(0, &test1), tempScore);
 #endif
 
-        assertC(scoreFor(0, &test1), tempScore);
+        result = result + assertC(scoreFor(0, &test1), tempScore);
     }
 
 
@@ -121,8 +122,8 @@ int main()
     printf("discard: scoreFor(0, test1) == %d, expected == %d\n", scoreFor(0, &test1), tempScore);
 #endif
         
-        assertC(scoreFor(0, &test1), tempScore);
+        result = result + assertC(scoreFor(0, &test1), tempScore);
     }
-
+	printResult(result);
 }
 
