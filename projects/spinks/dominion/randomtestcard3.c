@@ -8,22 +8,22 @@
 #include <time.h>
 
 #define TESTCARD "village"
-int noise = 1;
+int noise = 0;
 
 int assertC(int actual, int expected, char this[50], char that[50])
 {   
     if (actual == expected)
     {
-        // printf("%s == %s\n", this, that);
-    	// printf("Actual == %d  &&  Expected == %d\n", actual, expected);	
-        //printf("--PASSED--\n"); 
+        printf("%s == %s\n", this, that);
+    	printf("Actual == %d  &&  Expected == %d\n", actual, expected);	
+        printf("--PASSED--\n"); 
         return 0;
     }
     else
     {
-    	// printf("%s == %s\n", this, that);
-    	// printf("Actual == %d  &&  Expected == %d\n", actual, expected);		
-        // printf("--TEST FAILED--\n");
+    	 printf("%s == %s\n", this, that);
+    	 printf("Actual == %d  &&  Expected == %d\n", actual, expected);		
+         printf("--TEST FAILED--\n");
         return -1;
     }
 }
